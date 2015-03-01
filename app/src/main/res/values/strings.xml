@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Wikipedia Image Search</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="default_content_description">Not yet known</string>
+
+    <!-- ImageSearchDelegate -->
+    <string name="search_hint">Enter your image query here</string>
+    <string name="network_disconnected_hint">Please connect to the Internet</string>
+
+</resources>
