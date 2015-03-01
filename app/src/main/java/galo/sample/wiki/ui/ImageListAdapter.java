@@ -38,19 +38,8 @@ public class ImageListAdapter extends ArrayAdapter<ImageLoadAndDisplayInterface>
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        ImageView iv;
-        if (convertView == null)
-        {
-            iv = (ImageView) LayoutInflater.from(getContext()).inflate(mImageViewResource, parent, false);
-        }
-        else
-        {
-            iv = (ImageView) convertView;
-            ImageLoadAndDisplayInterface previousWrapper = (ImageLoadAndDisplayInterface) iv.getTag();
-            // null-check only because of hack below.
-            if(previousWrapper != null)
-                previousWrapper.bindImageView(null);
-        }
+        ImageView iv = convertView != null ? (ImageView) convertView
+                : (ImageView) LayoutInflater.from(getContext()).inflate(mImageViewResource, parent, false);
 
         // HACK HACK HACK
         // This hack assumes that the 5th element in the stack trace was and always will be the method
@@ -63,11 +52,18 @@ public class ImageListAdapter extends ArrayAdapter<ImageLoadAndDisplayInterface>
         {
             ImageLoadAndDisplayInterface newWrapper = getItem(position);
             newWrapper.bindImageView(iv);
-            iv.setTag(newWrapper);
         }
         return iv;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * This will also iterate through the adapter elements, remove bound ImageViews and their
+     * BitmapDrawables, and recycle all bitmaps that have not been explicitly tagged  NOT to do so
+     *
+     * @see ImageLoadAndDisplayInterface#recycle()
+     */
     @Override
     public void clear()
     {
@@ -80,6 +76,20 @@ public class ImageListAdapter extends ArrayAdapter<ImageLoadAndDisplayInterface>
         super.clear();
     }
 
+    /**
+     * Checking the callstack reveals that we can check the intent of the 'getView' call.  If the
+     * method name of the 6th element on the callstack(when calling this method from the 'getView'
+     * method here in this class) is called 'makeAndAddView', then we know that the intent for the
+     * created view is going to be to add it to the viewable grid rather than to add it as a scrap
+     * view for later use.
+     *
+     * Note: this is merely a workaround for the situation.  It creates the assumption that this
+     * adapter will always be part of a GridView (since I have not checked other adapters for the
+     * noticed behavior) and that the implementation is the same accross all versions of GridView.
+     *
+     * @return
+     * true if the 6th item's name on the callstack is "makeAndAddView, false otherwise.
+     */
     private boolean isCreatingToRetain()
     {
         return Thread.currentThread().getStackTrace()[5].getMethodName().equals("makeAndAddView");
