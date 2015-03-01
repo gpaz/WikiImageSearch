@@ -46,10 +46,10 @@ public class ImageListAdapter extends ArrayAdapter<ImageLoadAndDisplayInterface>
         else
         {
             iv = (ImageView) convertView;
-            /*ImageLoadAndDisplayInterface previousWrapper = (ImageLoadAndDisplayInterface) iv.getTag();
+            ImageLoadAndDisplayInterface previousWrapper = (ImageLoadAndDisplayInterface) iv.getTag();
             // null-check only because of hack below.
             if(previousWrapper != null)
-                previousWrapper.bindImageView(null);*/
+                previousWrapper.bindImageView(null);
         }
 
         // HACK HACK HACK
