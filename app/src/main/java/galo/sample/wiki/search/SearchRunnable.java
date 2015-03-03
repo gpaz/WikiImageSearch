@@ -121,16 +121,16 @@ class SearchRunnable implements Runnable
         else
         {
             final ImageQueryResults results = ImageQueryResultsFactory.parseJSON(jsonString);
-
-            mHandler.post(new Runnable() {
+            mHandler.post(new Runnable()
+            {
                 @Override
-                public void run() {
+                public void run()
+                {
                     // last check for process cancellation before committing to the callback.
                     if (mPSMap.removeProcess(mQuery.getRequestId()))
                         mListener.onSearchResultReceived(results);
                 }
             });
         }
-
     }
 }
