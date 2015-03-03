@@ -4,9 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.net.ConnectivityManagerCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -75,7 +78,7 @@ public class WikiImageSearchFieldDelegate implements SearchResultListener
             }
         };
         mRemoteCacheExecutor = null;
-        registerNetworkStateReceiver();
+        registerConnectivityReceiver();
         registerSearchFieldTextWatcher();
     }
 
@@ -137,8 +140,7 @@ public class WikiImageSearchFieldDelegate implements SearchResultListener
         });
     }
 
-
-    private void registerNetworkStateReceiver()
+    private void registerConnectivityReceiver()
     {
         mSearchField.getContext().registerReceiver(mNetworkChangeReceiver = new BroadcastReceiver()
         {
@@ -146,27 +148,21 @@ public class WikiImageSearchFieldDelegate implements SearchResultListener
             public void onReceive(Context context, Intent intent)
             {
                 String action = intent.getAction();
-                if (action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION))
+                if(action.equals(ConnectivityManager.CONNECTIVITY_ACTION))
                 {
-                    NetworkInfo netInfo = intent.getExtras().<NetworkInfo>getParcelable(WifiManager.EXTRA_NETWORK_INFO);
+                    NetworkInfo netInfo = intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
                     if(netInfo != null && mSearchField != null)
                     {
-                        boolean bIsConnected = netInfo.isConnected();
-                        mSearchField.setEnabled(bIsConnected);
-                        mSearchField.setHint(bIsConnected ? R.string.search_hint : R.string.network_disconnected_hint);
+                        boolean bEnableSearch = netInfo.isConnectedOrConnecting();
+                        mSearchField.setEnabled(bEnableSearch);
+                        mSearchField.setHint(bEnableSearch ? R.string.search_hint : R.string.network_disconnected_hint);
                     }
                 }
-
             }
-
-        }, new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION));
-
+        },new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
-
-
-
-        @Override
+    @Override
     public void onSearchResultReceived(ImageQueryResults results)
     {
         final String requestId = results.getRequestId();
