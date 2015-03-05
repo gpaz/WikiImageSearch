@@ -94,12 +94,12 @@ public class WikiImageSearchFieldDelegate implements SearchResultListener
             public void onTextChanged(final CharSequence s, int start, int before, int count) {
                 // cancel any preceding operations scheduled
                 mSearchManager.cancel(mCurrentSearchId);
-                if (mSearchTask != null) {
+                if (mSearchTask != null)
                     mSearchTask.cancel();
-                }
                 // cancel callbacks for that last request, assuming that request ids are never the EMPTY_STRING
                 mCurrentSearchId = EMPTY_STRING;
-                if (!s.toString().isEmpty()) {
+                if (!s.toString().isEmpty())
+                {
                     // schedule Wiki Api search, giving time to the user to enter more text before commiting to the search.
                     mSearchTask = new TimerTask() {
                         @Override
@@ -121,12 +121,14 @@ public class WikiImageSearchFieldDelegate implements SearchResultListener
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s)
+            {
                 // do nothing here.
             }
 
             @Override
-            protected void finalize() throws Throwable {
+            protected void finalize() throws Throwable
+            {
                 super.finalize();
                 if (mExecuteSearchTimer != null) {
                     mExecuteSearchTimer.cancel();

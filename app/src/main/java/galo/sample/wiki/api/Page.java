@@ -5,7 +5,10 @@ package galo.sample.wiki.api;
  *
  * Created by Galo on 2/26/2015.
  */
-public class Page {
+public class Page
+{
+    public static final int MISSING_PAGEID_ID = -1;
+
     private int mPageId;
     private int mNs;
     private String mTitle;

@@ -2,6 +2,7 @@ package galo.sample.wiki.search;
 
 import android.net.http.AndroidHttpClient;
 import android.os.Handler;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -90,6 +91,7 @@ class SearchRunnable implements Runnable
                 sb.append(inScanner.nextLine());
 
             jsonString = sb.toString();
+            Log.d("json",jsonString);
         }
         catch (Exception e)
         {

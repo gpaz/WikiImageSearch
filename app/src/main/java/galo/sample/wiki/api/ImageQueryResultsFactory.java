@@ -42,7 +42,8 @@ public class ImageQueryResultsFactory
             {
                 String key = keyIterator.next();
                 JSONObject page = pages.getJSONObject(key);
-                int pageId = page.getInt(PAGEID);
+                // search 'venk', page with no page id and a 'missing' tag with empty string as value comes in.
+                int pageId = page.has(PAGEID) ? page.getInt(PAGEID) : Page.MISSING_PAGEID_ID;
                 int ns = page.getInt(NS);
                 String title = page.getString(TITLE);
                 int index = page.getInt(INDEX);

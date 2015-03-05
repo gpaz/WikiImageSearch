@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +16,8 @@ import galo.sample.wiki.R;
 import galo.sample.wiki.api.ImageQueryResults;
 import galo.sample.wiki.api.Page;
 import galo.sample.wiki.search.WikiImageSearchFieldDelegate;
+import galo.sample.wiki.ui.ThumbnailPageFragment.OnFragmentActionListener;
+import galo.sample.wiki.search.WikiImageSearchFieldDelegate.ImageSearchResultListener;
 
 /**
  * An activity that presents a user with edit field that when the user types, an internet search will
@@ -25,7 +26,7 @@ import galo.sample.wiki.search.WikiImageSearchFieldDelegate;
  *
  * @author Galo
  */
-public class ImageSearchActivity extends FragmentActivity implements WikiImageSearchFieldDelegate.ImageSearchResultListener, ThumbnailPageFragment.OnFragmentActionListener
+public class ImageSearchActivity extends FragmentActivity implements ImageSearchResultListener, OnFragmentActionListener
 {
     private static final String TAG_IMAGE_PAGE_PREVIEW_FRAG = "image_pane_preview_fragment";
 
@@ -37,7 +38,6 @@ public class ImageSearchActivity extends FragmentActivity implements WikiImageSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_search);
         mSearchField = (EditText) findViewById(R.id.search_field);
-        DisplayMetrics dm = getResources().getDisplayMetrics();
         FragmentManager fm = getSupportFragmentManager();
 
         if(fm.findFragmentByTag(TAG_IMAGE_PAGE_PREVIEW_FRAG) == null)
